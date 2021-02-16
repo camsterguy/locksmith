@@ -5,6 +5,8 @@ import re
 import ssl
 from datetime import date
 from urllib.request import Request, urlopen
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 today = date.today()
 thismonth = today.strftime("%b")
@@ -32,7 +34,7 @@ def setup403(initURL):
     ctx.verify_mode = ssl.CERT_NONE
     req = urllib.request.Request(initURL, headers=hdr)
     response = urllib.request.urlopen(req, context=ctx).read()
-    soup = BeautifulSoup(response, 'html.parser')
+    soup = BeautifulSoup(response, 'lxml')
 
 
 #Usage: get_Winners("https://www.basketball-reference.com/boxscores/index.fcgi?month="+month+"&day="+day+"&year="+year+"")
@@ -64,11 +66,11 @@ def get_Games(url):
             hometeams.append(homeabrev)
                                             
 def get_Spreads(url):
-    setup403(url)
-    table_rows = soup.find_all('div', attrs={"id":"contentbody"})
-    for tr in table_rows:
-        print(tr.get_text())
-
+    setupHTTP(url)
+    table_rows = soup.find_all('div', class_='game-line__home-line d-flex justify-content-around')
+    for game in table_rows:
+        odds = game.find('button')
+        print(odds.get_text()[:4])
 
     
 

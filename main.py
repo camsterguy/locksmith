@@ -5,7 +5,7 @@ today = date.today()
 month = str((today.strftime("%B"))).lower()
 year = (today.strftime("%Y"))
 scheduleURL = "https://www.basketball-reference.com/leagues/NBA_"+year+"_games-"+month+".html"
-spreadsURL = "https://www.betonline.ag/sportsbook/basketball/nba"
+spreadsURL = "https://mybookie.ag/sportsbook/nba/"
 
 print("Today's Games:",today)
 
