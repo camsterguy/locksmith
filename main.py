@@ -9,11 +9,18 @@ year = (today.strftime("%Y"))
 scheduleURL = "https://www.basketball-reference.com/leagues/NBA_"+year+"_games-"+month+".html"
 
 
-crit.get_Spreads("2021", "02", "16")
+year="2021"
+month="02"
+day="17"
+
+
+crit.get_Spreads(year, month, day)
 from criticalFunctions import spreads
-
-print(spreads)
-
-crit.get_Games(scheduleURL)
+crit.get_Games(year, month, day)
 from criticalFunctions import hometeams, awayteams
-print(hometeams, awayteams)
+
+print("Slate:")
+count = 0
+for spread in spreads:
+	print(awayteams[count],spreads[count],"@",hometeams[count])
+	count += 1

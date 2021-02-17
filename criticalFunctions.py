@@ -8,6 +8,7 @@ from urllib.request import Request, urlopen
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import requests,os
+import time
 
 today = date.today()
 thismonth = today.strftime("%b")
@@ -17,11 +18,10 @@ thisyear = today.strftime("%Y")
 gamedate = thismonth+" "+thisday+", "+thisyear
 
 spreads = []
-awayteams = []
-hometeams = []
 
 def setupSelenium(url):
     global soup
+    global driver
     options = webdriver.ChromeOptions()
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.headless = True
@@ -31,9 +31,10 @@ def setupSelenium(url):
     options.add_argument("--disable-blink-features=AutomationControlled")
     driver = webdriver.Chrome(options=options, executable_path='./drivers/chromedriver')
     driver.get(url)
-
+    time.sleep(2)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
+    
 
 def setupHTTP(initURL):
     global soup
@@ -67,32 +68,43 @@ def get_Winners(url):
             finalabrev = abrev[:3]
             print(finalabrev)
 
-#Usage: get_Games("https://www.basketball-reference.com/leagues/NBA_2021_games-february.html")
-def get_Games(url):
-    setupHTTP(url)
-    table_rows = soup.find('table', id='schedule')
-    games = table_rows.find_all('tr')
+def get_Games(year, month, day):
+    dayurl=("https://www.sportsbookreview.com/betting-odds/nba-basketball/?date="+year+month+day)
+    setupSelenium(dayurl)
+    games = soup.find_all('div', class_='participantContainer-2nQw5')
     for game in games:
-        if gamedate in (game.get_text()):
-            awayteam = str(game.find("td", attrs={"data-stat":"visitor_team_name"}))
-            awayabrev = (''.join(re.findall('[A-Z]+',awayteam)))[:3]
-            hometeam = str(game.find("td", attrs={"data-stat":"home_team_name"}))
-            homeabrev = (''.join(re.findall('[A-Z]+',hometeam)))[:3]
-            #print(awayabrev,"at",homeabrev)
-            awayteams.append(awayabrev)
-            hometeams.append(homeabrev)
+        link = game.find('a')
+        newURL = "https://www.sportsbookreview.com"+(link['href'])
+        break
+    print(newURL)
+    setupSelenium(newURL)
+    teams = soup.find_all('div', class_='participant-zVHMr')
+    allteams = []
+    for team in teams:
+        allteams.append(team.text[:3])
+    global awayteams
+    global hometeams
+    awayteams = []
+    hometeams = []
+    awayteams = allteams[::2]
+    hometeams = allteams[1::2]
+    
+    
                                             
 def get_Spreads(year, month, day):
     dayurl=("https://www.sportsbookreview.com/betting-odds/nba-basketball/?date="+year+month+day)
-    print(dayurl)
     setupSelenium(dayurl)
     games = soup.find_all('div', class_='columnsContainer-3tVf9')
     for game in games:
         odds = game.find('span', class_='adjust-1uDgI')
         try:
-            spreads.append(odds.text)
+            if "½" in odds.text:
+                spreads.append(odds.text[:-1]+".5")
+            else:
+                spreads.append(odds.text)
         except:
             continue
+   
 
     
 
