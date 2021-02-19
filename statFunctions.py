@@ -67,7 +67,7 @@ def get_SLine(team):
 	get_Stat(14,15,team,isaway,soup)
 
 
-def get_Stat(homeindex, awayindex, team, isaway, soup):
+def get_Stat(awayindex, homeindex, team, isaway, soup):
 	if isaway == "isnt":
 		stats = soup.findAll("div", class_='trends-details')[awayindex]
 	else:
