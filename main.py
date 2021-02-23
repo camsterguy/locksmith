@@ -4,16 +4,14 @@ from datetime import date
 import statistics
 
 today = date.today()
-month = str((today.strftime("%B"))).lower()
+month = str((today.strftime("%m"))).lower()
 year = (today.strftime("%Y"))
+day = (today.strftime("%d"))
 
 
 scheduleURL = "https://www.basketball-reference.com/leagues/NBA_"+year+"_games-"+month+".html"
 
 
-year="2021"
-month="02"
-day="17"
 
 crit.get_Spreads(year, month, day)
 from criticalFunctions import spreads

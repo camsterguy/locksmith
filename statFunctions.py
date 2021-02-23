@@ -11,12 +11,14 @@ teamStats = {}
 
 statURL = "https://www.sportsline.com/nba/game-forecast/NBA_"+thisyear+thismonth+thisday+"_"
 
-year="2021"
-month="02"
-day="17"
+today = date.today()
+month = str((today.strftime("%m"))).lower()
+year = (today.strftime("%Y"))
+day = (today.strftime("%d"))
 
 
 def get_Opponent(team):
+	print("getting oppononent of",team,"...")
 	matchupDict = crit.get_Games(year, month, day)
 	key_list = list(matchupDict.keys())
 	val_list = list(matchupDict.values())
@@ -24,9 +26,11 @@ def get_Opponent(team):
 	teamLookup = ((matchupDict.get(team)))
 
 	if teamLookup is not None:
+		print(team,"@",teamLookup)
 		return (teamLookup),"is"
 	else:
 		position = val_list.index(team)
+		print(key_list[position],"@",team)
 		return (key_list[position]),"isnt"
 
 '''
@@ -57,6 +61,7 @@ def get_SLine(team):
 		scrapeURL = statURL+opponent+"@"+team
 	else:
 		scrapeURL = statURL+team+"@"+opponent
+
 	crit.setupSelenium(scrapeURL)
 	from criticalFunctions import soup
 	teamStats[team]=[]
@@ -67,12 +72,9 @@ def get_SLine(team):
 	get_Stat(14,15,team,isaway,soup)
 
 
-def get_Stat(awayindex, homeindex, team, isaway, soup):
+def get_Stat(homeindex, awayindex, team, isaway, soup):
 	if isaway == "isnt":
-		stats = soup.findAll("div", class_='trends-details')[awayindex]
+		final = soup.findAll("div", class_='trend-percentage orange')[awayindex]
 	else:
-		stats = soup.findAll("div", class_='trends-details')[homeindex]
-	ats = (stats.contents[0].get_text())
-	percent = ats[-6:-2]
-	final = (percent.replace('(','').replace(' ',''))
+		final = soup.findAll("div", class_='')[homeindex]
 	teamStats[team].append(float(final))

@@ -20,7 +20,9 @@ gamedate = thismonth+" "+thisday+", "+thisyear
 spreads = []
 
 def setupSelenium(initurl):
-    url = initurl.replace('NYK','NY').replace('NOP','NO').replace('GSW','GS')
+    print("@",initurl)
+    url = initurl.replace('NYK','NY').replace('NOP','NO').replace('GSW','GS').replace('PHX','PHO')
+    #print("@",url)
     global soup
     global driver
     options = webdriver.ChromeOptions()
@@ -80,10 +82,19 @@ def get_Games(year, month, day):
         newURL = "https://www.sportsbookreview.com"+(link['href'])
         break
     setupSelenium(newURL)
-    teams = soup.find_all('div', class_='participant-zVHMr')
+
+    
     allteams = []
-    for team in teams:
-        allteams.append(team.text[:3])
+
+    events = soup.find_all('a', class_="event-20qTD")
+    for event in events:
+        if event.find('section', class_="eventStatus-3EHqw postponed-ow-Wl compact-1oqj7 isMoreEvents-GSPaT") is None:
+            teams = event.find_all('div', class_='participant-zVHMr')
+
+            for team in teams:
+                allteams.append(team.text[:3])
+    
+
     global awayteams
     global hometeams
     awayteams = []
@@ -96,6 +107,7 @@ def get_Games(year, month, day):
     for team in awayteams:
         matchupDict[awayteams[count]] = hometeams[count]
         count += 1
+
 
     return matchupDict
 
