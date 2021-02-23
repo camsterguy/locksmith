@@ -65,16 +65,24 @@ def get_SLine(team):
 	crit.setupSelenium(scrapeURL)
 	from criticalFunctions import soup
 	teamStats[team]=[]
-	get_Stat(0,1,team,isaway,soup)
-	get_Stat(2,3,team,isaway,soup)
-	get_Stat(4,5,team,isaway,soup)
-	get_Stat(6,7,team,isaway,soup)
-	get_Stat(14,15,team,isaway,soup)
+	get_Stat(0,team,isaway,soup)
+	get_Stat(1,team,isaway,soup)
+	get_Stat(2,team,isaway,soup)
+	get_Stat(3,team,isaway,soup)
+	get_Stat(4,team,isaway,soup)
+	get_Stat(5,team,isaway,soup)
+	get_Stat(6,team,isaway,soup)
+	get_Stat(7,team,isaway,soup)
 
 
-def get_Stat(homeindex, awayindex, team, isaway, soup):
+def get_Stat(statnum, team, isaway, soup):
 	if isaway == "isnt":
-		final = soup.findAll("div", class_='trend-percentage orange')[awayindex]
+		final = soup.findAll("div", class_='home-trend')[statnum]
+		stat = final.findAll("div")[1].get_text()
+		stat = str(stat[:-1])
+		teamStats[team].append(float(stat))
 	else:
-		final = soup.findAll("div", class_='')[homeindex]
-	teamStats[team].append(float(final))
+		final = soup.findAll("div", class_='away-trend')[statnum]
+		stat = final.findAll("div")[0].get_text()
+		stat = str(stat[:-1])
+		teamStats[team].append(float(stat))
