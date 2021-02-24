@@ -18,11 +18,11 @@ day = (today.strftime("%d"))
 
 
 def get_Opponent(team):
-	print("getting oppononent of",team,"...")
+	print("getting opponent of",team,"...")
 	matchupDict = crit.get_Games(year, month, day)
 	key_list = list(matchupDict.keys())
 	val_list = list(matchupDict.values())
-	
+
 	teamLookup = ((matchupDict.get(team)))
 
 	if teamLookup is not None:
@@ -77,6 +77,15 @@ def get_SLine(team):
 
 def get_Stat(statnum, team, isaway, soup):
 	if isaway == "isnt":
+		final = soup.findAll("div", class_='home-trend')[statnum]
+		stat = final.findAll("div",)[1].get_text()
+		stat = str(stat[:-1])
+		if "0-" in stat:
+			teamStats[team].append(float(50))
+		else:
+			teamStats[team].append(float(stat))
+		print(teamStats)
+	else:
 		final = soup.findAll("div", class_='away-trend')[statnum]
 		stat = final.findAll("div")[0].get_text()
 		stat = str(stat[:-1])
@@ -84,11 +93,4 @@ def get_Stat(statnum, team, isaway, soup):
 			teamStats[team].append(float(50))
 		else:
 			teamStats[team].append(float(stat))
-	else:
-		final = soup.findAll("div", class_='home-trend')[statnum]
-		stat = final.findAll("div")[1].get_text()
-		stat = str(stat[:-1])
-		if "0-" in stat:
-			teamStats[team].append(float(50))
-		else:
-			teamStats[team].append(float(stat))
+		
