@@ -8,8 +8,10 @@ thisday = today.strftime("%d")
 thisyear = today.strftime("%Y")
 
 teamStats = {}
+ballRefStats = {}
 
 statURL = "https://www.sportsline.com/nba/game-forecast/NBA_"+thisyear+thismonth+thisday+"_"
+bballRefURL = "https://www.basketball-reference.com/teams"
 
 today = date.today()
 month = str((today.strftime("%m"))).lower()
@@ -84,7 +86,6 @@ def get_Stat(statnum, team, isaway, soup):
 			teamStats[team].append(float(50))
 		else:
 			teamStats[team].append(float(stat))
-		print(teamStats)
 	else:
 		final = soup.findAll("div", class_='away-trend')[statnum]
 		stat = final.findAll("div")[0].get_text()
@@ -93,4 +94,14 @@ def get_Stat(statnum, team, isaway, soup):
 			teamStats[team].append(float(50))
 		else:
 			teamStats[team].append(float(stat))
+
+'''get FG%, 3PT%, FT%. As well as Team Misc stats like effective FG%, Offensive rebound percentage
+	defensive rebound percentage. All you can find at https://www.basketball-reference.com/teams/"teamname"(aka BOS or PHI)/2021
+	'''
+		
+def get_TeamStat()
+	if isaway == "isnt":
+		final = soup.find('td', attrs = {'data-stat': 'fg_pct'}).get_text()
+
+
 		
