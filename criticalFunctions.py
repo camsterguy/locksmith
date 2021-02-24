@@ -20,7 +20,7 @@ gamedate = thismonth+" "+thisday+", "+thisyear
 spreads = []
 
 def setupSelenium(initurl):
-    url = initurl.replace('NYK','NY').replace('NOP','NO').replace('GSW','GS').replace('PHX','PHO')
+    url = initurl.replace('NYK','NY').replace('NOP','NO').replace('GSW','GS').replace('PHX','PHO').replace('SAS','SA')
     global soup
     global driver
     options = webdriver.ChromeOptions()
