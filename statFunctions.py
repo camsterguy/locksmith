@@ -77,12 +77,12 @@ def get_SLine(team):
 
 def get_Stat(statnum, team, isaway, soup):
 	if isaway == "isnt":
-		final = soup.findAll("div", class_='home-trend')[statnum]
-		stat = final.findAll("div")[1].get_text()
+		final = soup.findAll("div", class_='away-trend')[statnum]
+		stat = final.findAll("div")[0].get_text()
 		stat = str(stat[:-1])
 		teamStats[team].append(float(stat))
 	else:
-		final = soup.findAll("div", class_='away-trend')[statnum]
-		stat = final.findAll("div")[0].get_text()
+		final = soup.findAll("div", class_='home-trend')[statnum]
+		stat = final.findAll("div")[1].get_text()
 		stat = str(stat[:-1])
 		teamStats[team].append(float(stat))
