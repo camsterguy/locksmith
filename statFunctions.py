@@ -99,9 +99,29 @@ def get_Stat(statnum, team, isaway, soup):
 	defensive rebound percentage. All you can find at https://www.basketball-reference.com/teams/"teamname"(aka BOS or PHI)/2021
 	'''
 		
-def get_TeamStat()
-	if isaway == "isnt":
-		final = soup.find('td', attrs = {'data-stat': 'fg_pct'}).get_text()
+
+# BASKETBALL REFERENCE STATS:
+
+BRdict = {}
+statsToGet = ["fg_pct", "fg3_pct"]
+
+
+def get_TeamStat(team, tdname):
+	url = "https://www.basketball-reference.com/teams/"+str(team)+"/2021.html"
+	url = url.replace('BKN', 'BRK').replace('CHA', 'CHO')
+	crit.setup403(url)
+	from criticalFunctions import soup
+	stat = soup.find("td", attrs={"data-stat":tdname})
+	return stat.get_text()
+
+def get_BRStats(team):
+	BRdict[team] = []
+	print("Getting BReference stats for",team+"...")
+	for stat in statsToGet:
+		pulledStat = get_TeamStat(team, stat)
+		BRdict[team].append(pulledStat)
+
+
 
 
 		

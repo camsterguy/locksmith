@@ -72,6 +72,7 @@ def get_Winners(url):
             print(finalabrev)
 
 def get_Games(year, month, day):
+    print("Finding today's games...")
     dayurl=("https://www.sportsbookreview.com/betting-odds/nba-basketball/?date="+year+month+day)
     setupSelenium(dayurl)
     games = soup.find_all('div', class_='participantContainer-2nQw5')
@@ -113,6 +114,7 @@ def get_Games(year, month, day):
     
                                             
 def get_Spreads(year, month, day):
+    print("Finding today's spreads...")
     dayurl=("https://www.sportsbookreview.com/betting-odds/nba-basketball/?date="+year+month+day)
     setupSelenium(dayurl)
     games = soup.find_all('div', class_='columnsContainer-3tVf9')
