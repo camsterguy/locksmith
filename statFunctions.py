@@ -1,6 +1,7 @@
 import criticalFunctions as crit
 from datetime import date
 import re
+import statistics
 
 today = date.today()
 thismonth = today.strftime("%m")
@@ -102,7 +103,6 @@ def get_Stat(statnum, team, isaway, soup):
 
 # BASKETBALL REFERENCE STATS:
 
-BRdict = {}
 statsToGet = ["fg_pct", "fg3_pct"]
 
 
@@ -115,11 +115,13 @@ def get_TeamStat(team, tdname):
 	return stat.get_text()
 
 def get_BRStats(team):
-	BRdict[team] = []
+	teamBRStats = []
 	print("Getting BReference stats for",team+"...")
 	for stat in statsToGet:
 		pulledStat = get_TeamStat(team, stat)
-		BRdict[team].append(pulledStat)
+		teamBRStats.append((float(pulledStat))*100)
+	return statistics.mean(teamBRStats)
+
 
 
 
