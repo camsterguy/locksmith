@@ -31,11 +31,11 @@ from statFunctions import teamStats
 print("Slate:")
 count = 0
 for spread in spreads:
-	print(awayteams[count],((stat.get_BRStats(awayteams[count])+(statistics.mean(teamStats[awayteams[count]])))/2),spreads[count],"@",hometeams[count],((stat.get_BRStats(hometeams[count]+statistics.mean(teamStats[hometeams[count]])))/2))
+	print(awayteams[count],(stat.get_BRStats(awayteams[count])+(statistics.mean(teamStats[awayteams[count]])))/2,spreads[count],"@",hometeams[count],(stat.get_BRStats(hometeams[count])+(statistics.mean(teamStats[hometeams[count]])))/2)
 	count += 1
 
 
 
-print(stat.get_BRStats("BOS"))
+
 
 

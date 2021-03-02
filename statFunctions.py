@@ -108,10 +108,11 @@ statsToGet = ["fg_pct", "fg3_pct"]
 
 def get_TeamStat(team, tdname):
 	url = "https://www.basketball-reference.com/teams/"+str(team)+"/2021.html"
-	url = url.replace('BKN', 'BRK').replace('CHA', 'CHO')
-	crit.setup403(url)
+	url = url.replace('BKN', 'BRK').replace('CHA', 'CHO').replace('PHX', 'PHO')
+	crit.setupHTTP(url)
 	from criticalFunctions import soup
-	stat = soup.find("td", attrs={"data-stat":tdname})
+	table = soup.find("div", {"id": "div_team_and_opponent"})
+	stat = table.find("td", attrs={"data-stat":tdname})
 	return stat.get_text()
 
 def get_BRStats(team):

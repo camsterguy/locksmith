@@ -9,6 +9,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import requests,os
 import time
+import requests
 
 today = date.today()
 thismonth = today.strftime("%b")
@@ -21,6 +22,7 @@ spreads = []
 
 def setupSelenium(initurl):
     url = initurl.replace('NYK','NY').replace('NOP','NO').replace('GSW','GS').replace('PHX','PHO').replace('SAS','SA')
+    print(url)
     global soup
     global driver
     options = webdriver.ChromeOptions()
@@ -39,12 +41,13 @@ def setupSelenium(initurl):
 
 def setupHTTP(initURL):
     time.sleep(1)
+    comm = re.compile("<!--|-->")
     global soup
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
-    html = urllib.request.urlopen(initURL, context=ctx).read()
-    soup = BeautifulSoup(html, 'html.parser')
+    html = requests.get(initURL).text
+    soup = BeautifulSoup(re.sub("<!--|-->","", html), 'html.parser')
 
 def setup403(initURL):
     global soup
@@ -72,7 +75,6 @@ def get_Winners(url):
             print(finalabrev)
 
 def get_Games(year, month, day):
-    print("Finding today's games...")
     dayurl=("https://www.sportsbookreview.com/betting-odds/nba-basketball/?date="+year+month+day)
     setupSelenium(dayurl)
     games = soup.find_all('div', class_='participantContainer-2nQw5')
