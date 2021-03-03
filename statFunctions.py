@@ -103,24 +103,64 @@ def get_Stat(statnum, team, isaway, soup):
 
 # BASKETBALL REFERENCE STATS:
 
-statsToGet = ["fg_pct", "fg3_pct"]
-
+statsToGet = ["fg_pct", "fg3_pct", "ft_pct", "efg_pct", "orb_pct", "drb_pct", "tov_pct"]
 
 def get_TeamStat(team, tdname):
 	url = "https://www.basketball-reference.com/teams/"+str(team)+"/2021.html"
 	url = url.replace('BKN', 'BRK').replace('CHA', 'CHO').replace('PHX', 'PHO')
 	crit.setupHTTP(url)
 	from criticalFunctions import soup
+	
 	table = soup.find("div", {"id": "div_team_and_opponent"})
+	miscTable = soup.find("div", {"id": "all_team_misc"})
+	
 	stat = table.find("td", attrs={"data-stat":tdname})
-	return stat.get_text()
+	miscStat = miscTable.find("td", attrs={"data-stat":tdname})
+
+	if(stat == None):
+		return miscStat.get_text()
+	else:
+		return stat.get_text()
 
 def get_BRStats(team):
 	teamBRStats = []
-	print("Getting BReference stats for",team+"...")
 	for stat in statsToGet:
 		pulledStat = get_TeamStat(team, stat)
-		teamBRStats.append((float(pulledStat))*100)
+
+		if(stat == "fg3_pct"):
+			three = float(pulledStat)*100
+			diff = 50 - three
+			if(diff < 0):
+				teamBRStats.append(three)
+			else:
+				teamBRStats.append(50 + diff)
+
+		if(stat == "fg_pct"):
+			fg = float(pulledStat)*100
+			diff = 50 - fg
+			if(diff < 0):
+				teamBRStats.append(fg)
+			else:
+				teamBRStats.append(50 + diff)
+
+		if(stat == "ft_pct"):
+			teamBRStats.append((float(pulledStat)*100) - 15)
+
+		if(stat == "efg_pct"):
+			teamBRStats.append(float(pulledStat)*100)
+
+		if(stat == "drb_pct"):
+			teamBRStats.append(float(pulledStat) - 10)
+
+
+		'''appending turnover percentage to teamBRStats'''
+		if(stat == "tov_pct"):
+			teamBRStats.append(50 - (float(pulledStat)*2))
+
+		'''appending offensive rebound percentage to teamBRStats'''
+		if(stat == "orb_pct"):
+			teamBRStats.append(40 + float(pulledStat))
+
 	return statistics.mean(teamBRStats)
 
 

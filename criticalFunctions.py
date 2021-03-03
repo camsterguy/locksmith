@@ -22,7 +22,7 @@ spreads = []
 
 def setupSelenium(initurl):
     url = initurl.replace('NYK','NY').replace('NOP','NO').replace('GSW','GS').replace('PHX','PHO').replace('SAS','SA')
-    print(url)
+    '''print(url)'''
     global soup
     global driver
     options = webdriver.ChromeOptions()
