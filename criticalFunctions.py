@@ -48,6 +48,7 @@ def setupHTTP(initURL):
     ctx.verify_mode = ssl.CERT_NONE
     html = requests.get(initURL).text
     soup = BeautifulSoup(re.sub("<!--|-->","", html), 'html.parser')
+    return soup
 
 def setup403(initURL):
     global soup
