@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.options import Options
 import requests,os
 import time
 import requests
-
+import sys
 today = date.today()
 thismonth = today.strftime("%b")
 thisday = today.strftime("%d")
@@ -22,7 +22,7 @@ spreads = []
 
 def setupSelenium(initurl):
     url = initurl.replace('NYK','NY').replace('NOP','NO').replace('GSW','GS').replace('PHX','PHO').replace('SAS','SA')
-    print(url)
+    #print(url)
     global soup
     global driver
     options = webdriver.ChromeOptions()
@@ -83,7 +83,10 @@ def get_Games(year, month, day):
         link = game.find('a')
         newURL = "https://www.sportsbookreview.com"+(link['href'])
         break
-    setupSelenium(newURL)
+    try:
+        setupSelenium(newURL)
+    except:
+        print("Error: No games found for today.")
 
     
     allteams = []
